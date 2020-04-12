@@ -22,26 +22,13 @@ pub fn puts(str: [*:0]const u8) c_int {
     );
 }
 
-fn fmtNum(num: u32, buffer: []u8) ![*:0]const u8 {
-    const std = @import("std");
-    const formatted = try std.fmt.bufPrint(buffer, "{}\n\x00", .{num});
-    return @ptrCast([*:0]const u8, formatted.ptr);
-}
+
 
 fn main() noreturn {
-    const a = 486;
-    var buffer: [16]u8 = undefined;
-    _ = puts("yo\n");
-    _ = puts(fmtNum(a, &buffer) catch "error\n");
-    _ = puts("num\n");
-    _ = puts("num2\n");
-    const b = puts(fmtNum(98, &buffer) catch "error\n");
-    _ = puts(fmtNum(@intCast(u32, b), &buffer) catch "error\n");
+    while (true) {
+        const fmt = @import("fmt/fmt.zig");
 
-    while (true) {}
+        _ = puts(fmt.print(2) catch "error\n");
+        _ = puts(fmt.print(694) catch "error\n");
+    }
 }
-
-//const builtin = @import("builtin");
-//pub fn panic(msg: []const u8, error_return_trace: ?*builtin.StackTrace) noreturn {
-//    while (true) {}
-//}

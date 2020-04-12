@@ -1,5 +1,5 @@
 all:
-	zig build-exe main.zig -target mipsel-freestanding-gnueabi -mcpu mips1+soft_float --linker-script playstation.x
+	zig build-exe main.zig -target mipsel-freestanding-gnueabi -mcpu mips1+soft_float --linker-script psx.ld
 	~/psxsdk/tools/elf2exe main zig.exe -mark_eur
 	mkdir -p cdimg/
 	cp zig.exe cdimg/
