@@ -22,11 +22,17 @@ pub fn puts(str: [*:0]const u8) c_int {
     );
 }
 
-fn main() noreturn {
-    while (true) {
-        const fmt = @import("fmt/fmt.zig");
+usingnamespace @import("gpu.zig");
 
-        _ = puts(fmt.fmtZ("{}, {}", .{"hello world!", 34}));
-        _ = puts(fmt.fmtZ("{}", .{694}));
+fn main() noreturn {
+    {
+        const fmt = @import("fmt/fmt.zig");
+        _ = puts(fmt.fmtZ("{}", .{"hello world!"}));
+    }
+
+    const gpu: Gpu = undefined;
+    const cfg = Gpu.GpuCfg {.w = 368, .h = 240};
+    gpu.init(cfg) catch {_ = puts(fmt.fmtZ("gpu init fail"));};
+    while (true) {
     }
 }
