@@ -22,13 +22,11 @@ pub fn puts(str: [*:0]const u8) c_int {
     );
 }
 
-
-
 fn main() noreturn {
     while (true) {
         const fmt = @import("fmt/fmt.zig");
 
-        _ = puts(fmt.print(2) catch "error\n");
-        _ = puts(fmt.print(694) catch "error\n");
+        _ = puts(fmt.fmtZ("{}, {}", .{"hello world!", 34}));
+        _ = puts(fmt.fmtZ("{}", .{694}));
     }
 }
