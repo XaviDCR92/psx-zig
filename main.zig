@@ -4,6 +4,11 @@ extern var __bss_end: u8;
 extern var __bss_start: u8;
 
 export fn _start() linksection(".main") noreturn {
+    asm volatile (
+        \\ li $29, 0x801fff00
+        \\ li $k1, 0x1f800000
+    );
+
     {
         const sz = @ptrToInt(&__bss_end) - @ptrToInt(&__bss_start);
         @memset(@ptrCast([*]u8, &__bss_start), 0, sz);
@@ -12,17 +17,8 @@ export fn _start() linksection(".main") noreturn {
     main();
 }
 
-pub fn puts(str: [*:0]const u8) c_int {
-    return asm volatile (
-        \\ li $9, 0x3f
-        \\ j 0xa0
-        \\ nop
-        : [ret] "={r2}" (-> c_int)
-        : [str] "{r4}" (str)
-    );
-}
-
 usingnamespace @import("gpu.zig");
+usingnamespace @import("puts.zig");
 
 fn main() noreturn {
     {
@@ -31,8 +27,9 @@ fn main() noreturn {
     }
 
     const gpu: Gpu = undefined;
-    const cfg = Gpu.GpuCfg {.w = 368, .h = 240};
+    const cfg = Gpu.Cfg {.w = 320, .h = 240};
     gpu.init(cfg) catch {_ = puts(fmt.fmtZ("gpu init fail"));};
+
     while (true) {
     }
 }
