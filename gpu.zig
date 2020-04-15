@@ -133,39 +133,32 @@ pub const Gpu = struct {
     }
 
     pub fn init(self: Self, comptime cfg: Cfg) !void {
-        comptime var w: Pos = undefined;
-        comptime var h: Pos = undefined;
-
         comptime {
             const screen_widths = [_]Pos {320, 368};
             const screen_heights = [_]Pos {240};
 
-            w = blk: {
+            blk: {
                 for (screen_widths) |width| {
                     if (width == cfg.w) {
-                        break :blk width;
+                        break :blk;
                     }
                 }
                 @compileError("Invalid width");
-            };
+            }
 
-            h = blk: {
+            blk: {
                 for (screen_heights) |height| {
                     if (height == cfg.h) {
-                        break :blk height;
+                        break :blk;
                     }
                 }
                 @compileError("Invalid height");
-            };
+            }
         }
-
-        const a = puts(fmt.fmtZ("x={}, y={}, w={}, h={}", .{cfg.x, cfg.y, w, h}));
-
-        _ = puts(fmt.fmtZ("{}", .{a}));
 
         self.initTexPage();
         self.initTextureWindow();
-        self.initDrawingArea(w, h);
+        self.initDrawingArea(cfg.w, cfg.h);
         self.initDrawingAreaOffset(cfg.x, cfg.y);
         self.enableDisplay();
     }

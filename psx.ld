@@ -9,7 +9,7 @@ MEMORY {
 
 OUTPUT_FORMAT("elf32-tradlittlemips")
 OUTPUT_ARCH("mips")
-ENTRY(_start)
+ENTRY(start)
 
 SECTIONS
 {

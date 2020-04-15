@@ -3,7 +3,7 @@
 extern var __bss_end: u8;
 extern var __bss_start: u8;
 
-export fn _start() linksection(".main") noreturn {
+export fn start() linksection(".main") callconv(.C) noreturn {
     asm volatile (
         \\ li $29, 0x801fff00
         \\ li $k1, 0x1f800000
@@ -21,14 +21,19 @@ usingnamespace @import("gpu.zig");
 usingnamespace @import("puts.zig");
 
 fn main() noreturn {
+    const fmt = @import("fmt/fmt.zig");
+
     {
-        const fmt = @import("fmt/fmt.zig");
         _ = puts(fmt.fmtZ("{}", .{"hello world!"}));
     }
 
     const gpu: Gpu = undefined;
     const cfg = Gpu.Cfg {.w = 320, .h = 240};
-    gpu.init(cfg) catch {_ = puts(fmt.fmtZ("gpu init fail"));};
+    gpu.init(cfg) catch {
+        _ = puts(fmt.fmtZ("{}", .{"gpu init fail"}));
+    };
+
+    _ = puts(fmt.fmtZ("{}", .{"gpu init ok"}));
 
     while (true) {
     }
